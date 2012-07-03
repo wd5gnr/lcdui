@@ -8,6 +8,9 @@ using namespace std;
 #include "lcdui.h"
 #include <ctype.h>
 
+using namespace liblcdui;
+
+
 // Simple sub menu */
 MENU menu2[] = 
   {

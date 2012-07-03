@@ -22,7 +22,9 @@ Copyright (C) 2012 by Al Williams (al.williams@awce.com)
 
 using namespace std;
 
-
+namespace liblcdui 
+{
+  
 // This kicks off a menu (or a submenu)
 // if level is zero (default) you can't go back from here
 void lcdui::go(unsigned int level)
@@ -166,6 +168,7 @@ void lcdui::go(unsigned int level)
     }
 }
 
+}
 
   
   

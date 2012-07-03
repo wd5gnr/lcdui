@@ -26,6 +26,10 @@ Copyright (C) 2012 by Al Williams (al.williams@awce.com)
 #include <string>
 #include <cstdlib>
 
+
+namespace liblcdui 
+{
+  
 // The framework supports several types of menu items
 // T_ACTION - Calls the dispatch function to execute a command
 // T_INT - Manages an integer value associated with this item
@@ -104,6 +108,7 @@ class lcdui
 // Shorthand to end a menu (NULL entry)
 #define END_MENU     { NULL, 1, 0, T_ACTION, NULL, 0, 0, 0, NULL, NULL, 1  }
 
+}
 
 
 #endif
