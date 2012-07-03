@@ -1,0 +1,4 @@
+This is a simple framework for building an embedded system 
+using C++ with an LCD (or similar) display along with a
+few pushbuttons (up/down/select/back)
+
