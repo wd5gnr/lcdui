@@ -80,12 +80,14 @@ void lcdui::go(unsigned int level)
 	    {
 	      if (((*menu[current].value)-menu[current].step)<menu[current].min) break;
 	      (*menu[current].value)-=menu[current].step;
+	      callback(menu[current].id,menu[current].menutype,EV_CHANGE,menu[current].value);
 	      break;
 	    }
 	  if (mode==2)  // if modifying an enum
 	    {
 	      if (*menu[current].value==0) break;
 	      (*menu[current].value)--;
+	      callback(menu[current].id,menu[current].menutype,EV_CHANGE, menu[current].value);
 	      break;
 	    }
 	  // none of the above, just navigating the menu
@@ -97,6 +99,7 @@ void lcdui::go(unsigned int level)
 	    {
 	      if (((*menu[current].value)+menu[current].step)>menu[current].max) break;
 	      (*menu[current].value)+=menu[current].step;
+	      callback(menu[current].id,menu[current].menutype,EV_CHANGE,menu[current].value);
 	      break;
 	    }
 	  if (mode==2)  // change enum
@@ -104,6 +107,7 @@ void lcdui::go(unsigned int level)
 	      (*menu[current].value)++;
 	      if (menu[current].enumeration[*menu[current].value].name==NULL)
 		(*menu[current].value)--;
+	      callback(menu[current].id,menu[current].menutype,EV_CHANGE,menu[current].value);
 	      break;
 	    }
 	  // none of the above, navigate the menu	  
@@ -118,11 +122,13 @@ void lcdui::go(unsigned int level)
 	    {
 	      mode=0;
 	      // note we have no way to roll back with the current 
-	      // scheme; changes are "hot"
+	      // scheme; changes are "hot" unless you override callback
+	      callback(menu[current].id,menu[current].menutype,EV_SAVE,menu[current].value);
 	      break;
 	    }
 	  
-	  // Do a subment
+
+	  // Do a submenu
 	  if (menu[current].menutype==T_MENU)
 	    {
 	      // remember where we are
@@ -131,6 +137,7 @@ void lcdui::go(unsigned int level)
 	      // go to new menu
 	      menu=menu[current].submenu;
 	      current=0;
+	      callback(menu[current].id,menu[current].menutype,EV_ACTION,menu[current].value);
 	      go(level+1);
 	      // back, so restore
 	      current=parentcur;
@@ -141,6 +148,7 @@ void lcdui::go(unsigned int level)
 	  // integer and not read only
 	  if (menu[current].menutype==T_INT && !menu[current].readonly)
 	    {
+	      callback(menu[current].id,menu[current].menutype,EV_EDIT,menu[current].value);
 	      mode=1;  // start edit
 	      break;
 	      
@@ -148,17 +156,23 @@ void lcdui::go(unsigned int level)
 	  // enum and not read only
 	  if (menu[current].menutype==T_ENUM && !menu[current].readonly)
 	    {
+	      callback(menu[current].id,menu[current].menutype,EV_EDIT,menu[current].value);
 	      mode=2;  // start edit
 	      break;
 	      
 	    }
 	  // none of the above, so must be T_ACTION	  
-	  dispatch(menu[current].id);
+	  callback(menu[current].id,menu[current].menutype,EV_ACTION,menu[current].value);
 	  break;
 	  
 	  // back button gets out of a menu;
 	case IN_BACK:
-	  mode=0;  // stop editing
+	  if (mode)
+	    {
+	      mode=0;  // stop editing
+	      callback(menu[current].id,menu[current].menutype,EV_CANCEL,menu[current].value);
+	      break;  // don't leave submenu if editing
+	    }
 	  // note could save edited value and restore here
 	  // or edit a local copy and only save on ok
 	  if (level) return;  // only return if nested
@@ -167,6 +181,24 @@ void lcdui::go(unsigned int level)
 	}
     }
 }
+
+  void lcdui::callback(int id, MENUTYPE mtype, EVTYPE event, int *value)
+  {
+    switch (mtype)
+      {
+      case T_ACTION:
+	dispatch(id);
+	break;
+	
+	// A custom override could get notified when anything changes here
+      case T_INT:
+      case T_ENUM:
+      case T_MENU:
+	break;
+      }
+  }
+  
+  
 
 }
 

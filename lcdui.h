@@ -61,6 +61,15 @@ enum INTYPE
   };
 
 
+// Event types for callback
+enum EVTYPE
+  {
+    EV_ACTION, EV_EDIT, EV_CHANGE, EV_SAVE, EV_CANCEL
+  };
+ 
+ 
+  
+
   
 // Each menu is an array of these structures
 struct MENU
@@ -95,6 +104,7 @@ class lcdui
    lcdui(MENU *_menu) : menu(_menu) { current=0; };
   // execute the menu
   virtual void go(unsigned int menulevel=0);
+  virtual void callback(int id, MENUTYPE mtype, EVTYPE event, int *value=NULL);
   // override to handle T_ACTION menu items
   virtual void dispatch(int id) = 0;
   // called when no input available
