@@ -106,7 +106,7 @@ class lcdui
   virtual void go(unsigned int menulevel=0);
   virtual void callback(int id, MENUTYPE mtype, EVTYPE event, int *value=NULL);
   // override to handle T_ACTION menu items
-  virtual void dispatch(int id) = 0;
+  virtual void dispatch(int id) { };
   // called when no input available
   virtual void idle(void) {};
   // get an input code
