@@ -39,9 +39,9 @@ MENU mainmenu[] =
   {
     { "Entry 1", 1, 0, T_ACTION, NULL, 0, 0, 0, NULL, NULL, 1  },
     { "Entry 2", 1, 0, T_ACTION, NULL, 0, 0, 0, NULL, NULL, 2  },
-    { "Entry 3", 1, 0, T_ACTION, NULL, 0, 0, 0, NULL, NULL, 1  },
-    { "Value", 1, 0, T_INT, NULL, 0, 10, 1, &value1, NULL, 0   },
-    { "TF", 1, 0, T_ENUM, NULL, 0, 0, 0, &tfval, truefalse, 0   },
+    { "Entry 3", 1, 0, T_ACTION, NULL, 0, 0, 0, NULL, NULL, 3  },
+    { "Value", 1, 0, T_INT, NULL, 0, 10, 1, &value1, NULL, 1   },
+    { "TF", 1, 0, T_ENUM, NULL, 0, 0, 0, &tfval, truefalse, 1   },
     { "SUBMENU", 1, 0, T_MENU, menu2,  0, 0, 0, NULL, NULL, 1  },
     END_MENU    
   };
@@ -63,11 +63,25 @@ public:
     cout<<"Dispatch "<<id<<"\n";
   }
 
+  // override callback for debugging
+  // This would not normally be necessary
+  // unless you want notification of events like
+  // value editing or submenu opening
+  void callback(int id, MENUTYPE mtype, EVTYPE event, int *value)
+  {
+    lcdui::callback(id,mtype,event,value);
+    if ((mtype==T_INT || mtype==T_ENUM) && event==EV_SAVE)
+      cout<<"Done editing "<<id<<"\n";
+    if ((mtype==T_INT || mtype==T_ENUM) && event==EV_CANCEL)
+      cout<<"Done editing (cancel) "<<id<<"\n";
+  }
+
   // Get input (lazy, line oriented way so hit enter each time)
   INTYPE getInput(void)
   {
     int n;
     char c;
+    cout<<"<U>p, <D>own, <.>OK, <X>Back - Press Enter after command: ";
     cin>>c;
     n=toupper(c);
     // U=up, D=down, .=OK, X=back
