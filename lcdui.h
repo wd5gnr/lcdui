@@ -21,7 +21,6 @@ Copyright (C) 2012 by Al Williams (al.williams@awce.com)
 
 #ifndef __LCDUI_H
 #define __LCDUI_H
-#include <iostream>
 #include <sstream>
 #include <string>
 #include <cstdlib>

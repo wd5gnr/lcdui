@@ -6,6 +6,7 @@ using namespace std;
 
 
 #include "lcdui.h"
+#include <iostream>
 #include <ctype.h>
 
 using namespace liblcdui;
