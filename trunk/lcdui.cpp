@@ -46,15 +46,24 @@ void lcdui::go(unsigned int level)
       // now current is correct
       // get string
       string work=menu[current].mstring;
+#ifndef NOSTRING
       ostringstream digits;
-
+#else
+      char digits[8];
+#endif
       // modify based on type
       switch (menu[current].menutype)
 	{
 	case T_INT:  // add number
 	  work+="\t"; 
+#ifndef NOSTRING
 	  digits<<*menu[current].value;
 	  work+=digits.str();
+#else
+	  itoa(*menu[current].value,digits,10);
+	  work+=digits;
+#endif
+
 	  break;
 	  
 	case T_ENUM:  // add enumerated value
