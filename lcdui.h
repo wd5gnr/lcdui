@@ -21,9 +21,14 @@ Copyright (C) 2012 by Al Williams (al.williams@awce.com)
 
 #ifndef __LCDUI_H
 #define __LCDUI_H
+#ifndef NOSTRING
 #include <sstream>
 #include <string>
 #include <cstdlib>
+#else
+#include <stdlib.h>
+#endif
+
 
 
 namespace liblcdui 
@@ -111,7 +116,11 @@ class lcdui
   // get an input code
   virtual INTYPE  getInput(void) = 0;
   // Write to the LCD
+#ifndef NOSTRING
   virtual void output(std::string &ostring) = 0;
+#else
+  virtual void output(const char *ostring) = 0;
+#endif
 };
  
 // Shorthand to end a menu (NULL entry)
