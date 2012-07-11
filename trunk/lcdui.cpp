@@ -45,30 +45,37 @@ void lcdui::go(unsigned int level)
       
       // now current is correct
       // get string
-      string work=menu[current].mstring;
+
 #ifndef NOSTRING
+      string work=menu[current].mstring;
       ostringstream digits;
 #else
-      char digits[8];
+      char work[81];
 #endif
       // modify based on type
       switch (menu[current].menutype)
 	{
 	case T_INT:  // add number
-	  work+="\t"; 
 #ifndef NOSTRING
+	  work+="\t"; 
 	  digits<<*menu[current].value;
 	  work+=digits.str();
 #else
-	  itoa(*menu[current].value,digits,10);
-	  work+=digits;
+	  // assume 8 bit char
+	  work[0]='\t';
+	  itoa(*menu[current].value,work+1,10);
 #endif
 
 	  break;
 	  
 	case T_ENUM:  // add enumerated value
+#ifndef NOSTRING
 	  work+="\t";
 	  work+=+menu[current].enumeration[*menu[current].value].name;
+#else
+	  work[0]='\t';
+	  strcpy(work+1,menu[current].enumeration[*menu[current].value].name);
+#endif
 	  break;
 	}
       // write it
