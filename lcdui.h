@@ -26,8 +26,18 @@ Copyright (C) 2012 by Al Williams (al.williams@awce.com)
 #include <string>
 #include <cstdlib>
 #else
+#include <string.h>
 #include <stdlib.h>
 #endif
+
+// not all compilers like pure virtual
+#ifndef NOPURE
+#define PURE =0
+#else
+#define PURE { }
+#endif
+
+  
 
 
 
@@ -114,12 +124,12 @@ class lcdui
   // called when no input available
   virtual void idle(void) {};
   // get an input code
-  virtual INTYPE  getInput(void) = 0;
+  virtual INTYPE  getInput(void) PURE;
   // Write to the LCD
 #ifndef NOSTRING
-  virtual void output(std::string &ostring) = 0;
+  virtual void output(std::string &ostring) PURE;
 #else
-  virtual void output(const char *ostring) = 0;
+  virtual void output(const char *ostring) PURE;
 #endif
 };
  
