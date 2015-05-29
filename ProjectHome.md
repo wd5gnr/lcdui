@@ -1,0 +1,1 @@
+This is a fairly simple C++ framework for developing systems that consist of a display (like an LCD) and a few buttons like up/down/enter/back.
